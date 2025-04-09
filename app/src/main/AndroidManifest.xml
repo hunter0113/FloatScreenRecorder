@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+
+    <!-- Application visibility queries -->
+    <queries>
+        <!-- Query other apps that can handle the MAIN action -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+        <!-- Query other apps that have media projection capability -->
+        <intent>
+            <action android:name="android.media.projection.MediaProjectionManager" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.FloatScreenRecorder"
+        tools:targetApi="34">
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".record.activity.RecordingActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="behind"
+            android:theme="@style/appActivityTheme" />
+
+        <activity
+            android:name=".record.activity.PermissionActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="behind"
+            android:theme="@style/appActivityTheme" />
+
+        <activity
+            android:name=".record.activity.ShareVideoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="behind"
+            android:theme="@style/appActivityTheme"/>
+
+        <activity
+            android:name=".fab.activity.FABActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="behind"
+            android:theme="@style/appActivityTheme"/>
+
+        <service
+            android:name=".record.service.RecordingService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+        <service
+            android:name=".fab.service.FABService" />
+
+        <receiver android:name=".fab.broadcastReceiver.FloatingButtonReceiver"
+            android:exported="false">
+        </receiver>
+
+        <!--===============================================================================-->
+        <!--===============================================================================-->
+        <!--    For SDKProvider    -->
+        <provider
+            android:name="com.evan.floatscreenrecorder.provider.SDKProvider"
+            android:authorities="${applicationId}.evansdk.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+    </application>
+
+</manifest>
