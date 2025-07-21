@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.evan.floatscreenrecorder.record.callback.OutputVideoCallback;
 import com.evan.floatscreenrecorder.record.callback.RecordingStatusCallback;
 import com.evan.floatscreenrecorder.record.callback.ShareVideoCallback;
 import com.evan.floatscreenrecorder.record.service.RecordingService;
+
+import java.lang.ref.WeakReference;
 
 
 /**
@@ -38,32 +42,110 @@ public class RecordingManager {
     private static boolean sm_isRecording = false;
 
     // Callback //
-    private static RecordingStatusCallback recordingStatusCallback;
-    private static OutputVideoCallback outputVideoCallback;
-    private static ShareVideoCallback shareVideoCallback;
+    private static WeakReference<RecordingStatusCallback> recordingStatusCallback;
+    private static WeakReference<OutputVideoCallback> outputVideoCallback;
+    private static WeakReference<ShareVideoCallback> shareVideoCallback;
 
     public static RecordingStatusCallback getRecordingStatusCallback() {
-        return recordingStatusCallback;
+        return recordingStatusCallback != null ? recordingStatusCallback.get() : null;
     }
 
-    public static void setRecordingStatusCallback(RecordingStatusCallback recordingStatusCallback) {
-        RecordingManager.recordingStatusCallback = recordingStatusCallback;
+    public static void setRecordingStatusCallback(RecordingStatusCallback callback) {
+        recordingStatusCallback = callback != null ? new WeakReference<>(callback) : null;
     }
 
     public static OutputVideoCallback getOutputVideoCallback() {
-        return outputVideoCallback;
+        return outputVideoCallback != null ? outputVideoCallback.get() : null;
     }
 
-    public static void setOutputVideoCallback(OutputVideoCallback outputVideoCallback) {
-        RecordingManager.outputVideoCallback = outputVideoCallback;
+    public static void setOutputVideoCallback(OutputVideoCallback callback) {
+        outputVideoCallback = callback != null ? new WeakReference<>(callback) : null;
     }
 
     public static ShareVideoCallback getShareVideoCallback() {
-        return shareVideoCallback;
+        return shareVideoCallback != null ? shareVideoCallback.get() : null;
     }
 
-    public static void setShareVideoCallback(ShareVideoCallback shareVideoCallback) {
-        RecordingManager.shareVideoCallback = shareVideoCallback;
+    public static void setShareVideoCallback(ShareVideoCallback callback) {
+        shareVideoCallback = callback != null ? new WeakReference<>(callback) : null;
+    }
+
+
+    //=============================================================
+    /**
+     * Recording Status（Success）
+     * @param isRecording 錄製狀態
+     */
+    //=============================================================
+    public static void safelyCallRecordingStatusSuccess(boolean isRecording) {
+        RecordingStatusCallback callback = getRecordingStatusCallback();
+        if (callback != null) {
+            new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(isRecording));
+        }
+    }
+
+    //=============================================================
+    /**
+     * Recording Status（Error）
+     * @param errorMsg 錯誤信息
+     */
+    //=============================================================
+    public static void safelyCallRecordingStatusError(String errorMsg) {
+        RecordingStatusCallback callback = getRecordingStatusCallback();
+        if (callback != null) {
+            new Handler(Looper.getMainLooper()).post(() -> callback.onError(errorMsg));
+        }
+    }
+
+    //=============================================================
+    /**
+     * Output Video（Success）
+     * @param filePath 文件路徑
+     */
+    //=============================================================
+    public static void safelyCallOutputVideoSuccess(String filePath) {
+        OutputVideoCallback callback = getOutputVideoCallback();
+        if (callback != null) {
+            new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(filePath));
+        }
+    }
+
+    //=============================================================
+    /**
+     * Output Video（Error）
+     * @param errorMsg 錯誤信息
+     */
+    //=============================================================
+    public static void safelyCallOutputVideoError(String errorMsg) {
+        OutputVideoCallback callback = getOutputVideoCallback();
+        if (callback != null) {
+            new Handler(Looper.getMainLooper()).post(() -> callback.onError(errorMsg));
+        }
+    }
+
+    //=============================================================
+    /**
+     * Share Video（Finish）
+     */
+    //=============================================================
+    public static void safelyCallShareVideoFinish() {
+        ShareVideoCallback callback = getShareVideoCallback();
+        if (callback != null) {
+            new Handler(Looper.getMainLooper()).post(callback::onFinish);
+        }
+    }
+
+    //=============================================================
+    /**
+     * Share Video（Error）
+     * @param errorMsg 錯誤信息
+     */
+    //=============================================================
+    public static void safelyCallShareVideoError(String errorMsg) {
+        ShareVideoCallback callback = getShareVideoCallback();
+        if (callback != null) {
+            new Handler(Looper.getMainLooper()).post(() -> callback.onError(errorMsg));
+        }
     }
 
 

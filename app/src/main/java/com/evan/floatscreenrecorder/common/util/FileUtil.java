@@ -82,7 +82,6 @@ public class FileUtil {
 
         File file = new File(videoPath);
         if (file.exists()) {
-            Log.e("Evan", "檔案存在");
 
             long size = file.length();
             String fileName = file.getName();
@@ -100,13 +99,6 @@ public class FileUtil {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 values.put(MediaStore.Video.Media.DATE_TAKEN, dateTaken); // 插入時間
-
-                //Android 11以上 添加到系統圖庫
-                if(null == context){
-                    Log.e("Evan", "context null");
-                }else {
-                    Log.e("Evan", "context 非 null");
-                }
 
 
                 ContentResolver resolver = context.getContentResolver();

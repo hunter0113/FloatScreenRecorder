@@ -127,11 +127,6 @@ public class RecordingService extends Service implements Handler.Callback {
     //=============================================================
     private void setNotification() {
 
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return;
-        }
-
         // Android 12 強迫加上 FLAG_MUTABLE or FLAG_IMMUTABLE
         PendingIntent pendingIntent;
         Intent intent = new Intent(this, RecordingService.class);
@@ -163,10 +158,6 @@ public class RecordingService extends Service implements Handler.Callback {
      */
     //=============================================================
     public void startNotification() {
-        //Android 8.0+ 創建前台Service
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return;
-        }
         startForeground(Constants.NOTIFICATION_FOREGROUND_ID, notification);
     }
 
@@ -282,9 +273,7 @@ public class RecordingService extends Service implements Handler.Callback {
 
         RecordingManager.setIsRecording(true);
 
-        if (RecordingManager.getRecordingStatusCallback() != null) {
-            RecordingManager.getRecordingStatusCallback().onSuccess(true);
-        }
+        RecordingManager.safelyCallRecordingStatusSuccess(true);
     }
 
 
@@ -424,7 +413,7 @@ public class RecordingService extends Service implements Handler.Callback {
 
         // OutputVideo Callback //
         if (null != RecordingManager.getOutputVideoCallback()) {
-            RecordingManager.getOutputVideoCallback().onSuccess(RecordingManager.getManagerFinalFilePath());
+            RecordingManager.safelyCallOutputVideoSuccess(RecordingManager.getManagerFinalFilePath());
             return;
         }
 
@@ -521,7 +510,7 @@ public class RecordingService extends Service implements Handler.Callback {
         }
 
         if (null != RecordingManager.getShareVideoCallback()) {
-            RecordingManager.getShareVideoCallback().onError(Constants.RECORD_ERROR_MSG + "(" + ErrorCode + ").");
+            RecordingManager.safelyCallShareVideoError(Constants.RECORD_ERROR_MSG + "(" + ErrorCode + ").");
             deleteAllFile();
             return;
         }
@@ -553,7 +542,7 @@ public class RecordingService extends Service implements Handler.Callback {
 
         deleteAFile();
 
-        RecordingManager.getRecordingStatusCallback().onError(Constants.RECORD_NOTIFICATION_CLOSE_MSG);
+        RecordingManager.safelyCallRecordingStatusError(Constants.RECORD_NOTIFICATION_CLOSE_MSG);
 
         stopSelf();
 

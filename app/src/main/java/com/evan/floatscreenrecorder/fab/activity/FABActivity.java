@@ -56,12 +56,6 @@ public class FABActivity extends Activity {
     //=============================================================
     private void showFloatingButton() {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            showToast("不支援此裝置");
-            finish();
-            return;
-        }
-
         if (!Settings.canDrawOverlays(FABActivity.this)) {
             setPermissionDialog();
             permissionDialog.show();
@@ -96,9 +90,7 @@ public class FABActivity extends Activity {
         }).setPositiveButton("確認", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), FLOATING_PERMISSION_REQUEST_CODE);
-                }
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), FLOATING_PERMISSION_REQUEST_CODE);
             }
         }).setCancelable(false).create();
     }
