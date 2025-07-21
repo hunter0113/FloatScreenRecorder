@@ -3,6 +3,7 @@ package com.evan.floatscreenrecorder.record.service;
 
 import static com.evan.floatscreenrecorder.common.constant.Constants.NOTIFICATION_RECODE_CHANNEL_ID;
 import static com.evan.floatscreenrecorder.common.constant.Constants.RECORD_STOP_ACTION;
+import static com.evan.floatscreenrecorder.common.constant.RecordingConstants.*;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -72,7 +73,7 @@ public class RecordingService extends Service implements Handler.Callback {
      */
     private static String m_RecordFilePath_A;
     private static String m_RecordFilePath_Final;
-    private static final String DOT_MP4 = ".mp4";
+    private static final String DOT_MP4 = VIDEO_EXTENSION;
 
 
 

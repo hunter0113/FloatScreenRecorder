@@ -35,7 +35,32 @@ public class ToastUtil {
     }
 
     public static void show(int time, String msg) {
-        Toast.makeText(m_ctx, msg, time).show();
+        if (m_ctx != null) {
+            Toast.makeText(m_ctx, msg, time).show();
+        }
+    }
+    
+    /**
+     * 顯示 Toast（使用指定 Context）
+     * @param context 上下文
+     * @param msg 訊息
+     */
+    public static void showToast(Context context, String msg) {
+        if (context != null) {
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    /**
+     * 顯示 Toast（使用指定 Context 和時長）
+     * @param context 上下文
+     * @param msg 訊息
+     * @param duration 顯示時長
+     */
+    public static void showToast(Context context, String msg, int duration) {
+        if (context != null) {
+            Toast.makeText(context, msg, duration).show();
+        }
     }
 
     //=============================================================
