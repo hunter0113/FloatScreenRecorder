@@ -43,7 +43,6 @@ dependencies {
     implementation ("com.googlecode.mp4parser:isoparser:1.1.22")
 
 
-    implementation ("com.arthenica:ffmpeg-kit-full:6.0-2")
     implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
 }

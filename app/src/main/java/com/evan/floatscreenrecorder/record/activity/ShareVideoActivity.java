@@ -78,7 +78,7 @@ public class ShareVideoActivity extends Activity {
         }
 
 
-        RecordingManager.getShareVideoCallback().onFinish();
+        RecordingManager.safelyCallShareVideoFinish();
         finish();
         overridePendingTransition(0, 0);
     }
