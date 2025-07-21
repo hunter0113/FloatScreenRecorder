@@ -2,6 +2,7 @@ package com.evan.floatscreenrecorder.fab.service;
 
 
 import static com.evan.floatscreenrecorder.common.constant.Constants.*;
+import static com.evan.floatscreenrecorder.common.constant.RecordingConstants.*;
 import static com.evan.floatscreenrecorder.fab.manager.FABManager.getSideLength;
 
 import android.app.Service;
@@ -34,6 +35,7 @@ import com.evan.floatscreenrecorder.common.util.CircleBitmap;
 import com.evan.floatscreenrecorder.common.util.ClickUtil;
 import com.evan.floatscreenrecorder.common.util.DeviceUtils;
 import com.evan.floatscreenrecorder.common.util.LocalJsonUtils;
+import com.evan.floatscreenrecorder.common.util.MemoryManager;
 import com.evan.floatscreenrecorder.common.util.ToastUtil;
 import com.evan.floatscreenrecorder.fab.FABActionHandler;
 import com.evan.floatscreenrecorder.fab.broadcastReceiver.FloatingButtonReceiver;
@@ -64,15 +66,15 @@ public class FABService extends Service {
     /**
      * Side Length
      */
-    private static final int LARGE = 60;
-    private static final int MEDIUM = 50;
-    private static final int SMALL = 40;
+    private static final int LARGE = FAB_SIZE_LARGE;
+    private static final int MEDIUM = FAB_SIZE_MEDIUM;
+    private static final int SMALL = FAB_SIZE_SMALL;
 
 
     /**
      * Screen Invalid Margin
      */
-    private static final int MARGIN = 20;
+    private static final int MARGIN = FAB_MARGIN;
 
 
     /**
@@ -163,7 +165,7 @@ public class FABService extends Service {
         fabActionHandler.initFABLayoutParams(this);
 
         // set Spacing //
-        FABManager.setSpacing(dpToPx(5, this));
+        FABManager.setSpacing(dpToPx(FAB_SPACING, this));
 
         // set Screen Invalid Margin //
         FABManager.setScreenInvalidMargin(dpToPx(MARGIN, this));
@@ -221,23 +223,8 @@ public class FABService extends Service {
     //=============================================================
     private static void recycleImageView(ImageView imageView) {
         if (imageView != null) {
-            BitmapDrawable bd = (BitmapDrawable) imageView.getDrawable();
-            recycleBitmapDrawable(bd);
-        }
-    }
-
-
-    private static void recycleBitmapDrawable(BitmapDrawable bitmapDrawable) {
-        if (bitmapDrawable != null) {
-            Bitmap bitmap = bitmapDrawable.getBitmap();
-            recycleBitmap(bitmap);
-        }
-    }
-
-
-    private static void recycleBitmap(Bitmap bitmap) {
-        if (bitmap != null && !bitmap.isRecycled()) {
-            bitmap.recycle();
+            Drawable drawable = imageView.getDrawable();
+            MemoryManager.recycleDrawable(drawable);
         }
     }
 
@@ -991,12 +978,12 @@ public class FABService extends Service {
             FABManager.setServiceAlive(false);
         }
 
-        recycleBitmap(startRecordImageBmp);
-        recycleBitmap(cancelRecordImageBmp);
-        recycleBitmap(shareImageBmp);
-        recycleBitmap(customerServiceImageBmp);
-        recycleBitmap(optionImageBmp);
-        recycleBitmap(deleteImageBmp);
+        MemoryManager.recycleBitmap(startRecordImageBmp);
+        MemoryManager.recycleBitmap(cancelRecordImageBmp);
+        MemoryManager.recycleBitmap(shareImageBmp);
+        MemoryManager.recycleBitmap(customerServiceImageBmp);
+        MemoryManager.recycleBitmap(optionImageBmp);
+        MemoryManager.recycleBitmap(deleteImageBmp);
 
         recycleImageView(optionImageView);
         recycleImageView(deleteImageView);
