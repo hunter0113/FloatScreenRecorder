@@ -105,7 +105,8 @@ public class FABActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ToastUtil.show(msg);
+                // 使用當前 Activity 的 Context，避免依賴全域 Context
+                ToastUtil.showToast(FABActivity.this, msg);
             }
         });
     }
@@ -123,7 +124,7 @@ public class FABActivity extends Activity {
         } else {
             startIntent = new Intent(FAB_HIDE_ACTION);
         }
-        startIntent.setPackage(DeviceUtils.getPackageName());
+        startIntent.setPackage(DeviceUtils.getPackageName(activity));
         activity.sendBroadcast(startIntent);
     }
 
