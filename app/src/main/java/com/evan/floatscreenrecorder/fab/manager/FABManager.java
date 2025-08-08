@@ -1,6 +1,5 @@
 package com.evan.floatscreenrecorder.fab.manager;
 
-
 import static com.evan.floatscreenrecorder.common.constant.Constants.FAB_CLOSE_ACTION;
 
 import android.content.Context;
@@ -12,287 +11,227 @@ import com.evan.floatscreenrecorder.fab.model.FloatingConfigurationModel;
 import com.evan.floatscreenrecorder.record.callback.CloseFloatingButtonCallback;
 
 /**
- * Created by Evan on 2021/11/9.
- * <p>
- * Description：
+ * 浮動按鈕管理器
+ * 負責管理浮動按鈕的狀態、位置和配置
  */
 public class FABManager {
 
-    private static WindowManager sm_windowManager;
-    private static WindowManager.LayoutParams sm_floatingLayoutParams;
-    private static WindowManager.LayoutParams sm_deleteLayoutParams;
-    private static FloatingConfigurationModel sm_configurationModel;
+    // WindowManager 相關
+    private static WindowManager windowManager;
+    private static WindowManager.LayoutParams floatingLayoutParams;
+    private static WindowManager.LayoutParams deleteLayoutParams;
+    private static WindowManager.LayoutParams childLayoutParams;
 
-    private static WindowManager.LayoutParams sm_childLayoutParams;
+    // 配置模型
+    private static FloatingConfigurationModel configurationModel;
 
-    /**
-     * 紀錄退至後台時的位置，重新顯示時依此位置
-     */
-    private static int sm_nScreenInvalidMargin;
+    // 位置相關
+    private static int screenInvalidMargin; // 螢幕邊距
+    private static int lastLocationX; // 最後X座標
+    private static int lastLocationY; // 最後Y座標
 
-    /**
-     * 判斷是重開新的還是從後台回來
-     */
-    private static boolean sm_fromExternalInterface = false;
+    // 狀態相關
+    private static boolean fromExternalInterface = false; // 是否從外部介面啟動
+    private static boolean isServiceAlive = false; // 服務是否存活
+    private static boolean isFloatingShowing = false; // 是否正在顯示
+    private static boolean isUp = false; // 是否位於上半部
 
-    /**
-     * 紀錄退至後台時的位置，重新顯示時依此位置
-     */
-    private static int sm_nLastLocationX;
-    private static int sm_nLastLocationY;
+    // 浮動狀態常數
+    public static final int UNFOLDING = 0; // 展開狀態
+    public static final int FOLDING = 1; // 收合狀態
+    private static int floatingStatus = FOLDING; // 當前浮動狀態
 
-    /**
-     * 選單展開 / 摺疊狀態
-     */
-    public static final int UNFOLDING = 0;
-    public static final int FOLDING = 1;
-    private static int sm_nFloatingStatus = FOLDING;
+    // 尺寸相關
+    private static int spacing; // 按鈕間距
+    private static int sideLength; // 按鈕邊長
 
-    /**
-     * 子view之間間距
-     */
-    private static int sm_nSpacing;
+    // ==================== Getter 和 Setter 方法 ====================
 
     /**
-     * 子所有Image的邊長
-     */
-    private static int sm_nSideLength;
-
-    /**
-     * 當前FAB Service是否存在
-     */
-    private static boolean sm_isServiceAlive = false;
-
-    /**
-     * 當前FAB 是否顯示
-     */
-    private static boolean sm_isFloatingShowing = false;
-
-    /**
-     * FAB 位於上半部還是下半部
-     */
-    private static boolean sm_isUp = false;
-
-    /**
-     * Getter And Setter
+     * 服務狀態相關
      */
     public static boolean isServiceAlive() {
-        return sm_isServiceAlive;
+        return isServiceAlive;
     }
 
-    public static void setServiceAlive(boolean isServiceAlive) {
-        FABManager.sm_isServiceAlive = isServiceAlive;
+    public static void setServiceAlive(boolean serviceAlive) {
+        FABManager.isServiceAlive = serviceAlive;
     }
 
-
-    //=============================================================
     /**
-     * 最後的X座標
+     * 位置相關
      */
-    //=============================================================
     public static int getLastLocationX() {
-        return sm_nLastLocationX;
+        return lastLocationX;
     }
 
     public static void setLastLocationX(int lastX) {
-        FABManager.sm_nLastLocationX = lastX;
+        FABManager.lastLocationX = lastX;
     }
 
-
-    //=============================================================
-    /**
-     * 最後的Y座標
-     */
-    //=============================================================
     public static int getLastLocationY() {
-        return sm_nLastLocationY;
+        return lastLocationY;
     }
 
     public static void setLastLocationY(int lastY) {
-        FABManager.sm_nLastLocationY = lastY;
+        FABManager.lastLocationY = lastY;
     }
 
-
-    //=============================================================
     /**
-     * 當前狀態
+     * 浮動狀態相關
      */
-    //=============================================================
     public static int getFloatingStatus() {
-        return sm_nFloatingStatus;
+        return floatingStatus;
     }
 
-    public static void setFloatingStatus(int floatingStatus) {
-        FABManager.sm_nFloatingStatus = floatingStatus;
+    public static void setFloatingStatus(int status) {
+        FABManager.floatingStatus = status;
     }
 
-
-    //=============================================================
-    /**
-     * 是否正在顯示
-     */
-    //=============================================================
     public static boolean isFloatingShowing() {
-        return sm_isFloatingShowing;
+        return isFloatingShowing;
     }
 
-    public static void setFloatingShowing(boolean isFloatingShowing) {
-        FABManager.sm_isFloatingShowing = isFloatingShowing;
+    public static void setFloatingShowing(boolean showing) {
+        FABManager.isFloatingShowing = showing;
     }
 
-
-    //=============================================================
     /**
-     * set && get  WindowManager
+     * WindowManager 相關
      */
-    //=============================================================
-    public static void setWindowManager(WindowManager manager) {
-        sm_windowManager = manager;
-    }
-
     public static WindowManager getWindowManager() {
-        return sm_windowManager;
+        return windowManager;
     }
 
-
-    //=============================================================
-    /**
-     * set && get  FloatingLayoutParams
-     */
-    //=============================================================
-    public static void setFloatingLayoutParams(WindowManager.LayoutParams params) {
-        sm_floatingLayoutParams = params;
+    public static void setWindowManager(WindowManager manager) {
+        windowManager = manager;
     }
 
     public static WindowManager.LayoutParams getFloatingLayoutParams() {
-        return sm_floatingLayoutParams;
+        return floatingLayoutParams;
     }
 
+    public static void setFloatingLayoutParams(WindowManager.LayoutParams params) {
+        floatingLayoutParams = params;
+    }
 
-    //=============================================================
-    /**
-     * set && get  Delete LayoutParams
-     */
-    //=============================================================
     public static WindowManager.LayoutParams getDeleteLayoutParams() {
-        return sm_deleteLayoutParams;
+        return deleteLayoutParams;
     }
 
-    public static void setDeleteLayoutParams(WindowManager.LayoutParams deleteLayoutParams) {
-        FABManager.sm_deleteLayoutParams = deleteLayoutParams;
+    public static void setDeleteLayoutParams(WindowManager.LayoutParams params) {
+        deleteLayoutParams = params;
     }
 
+    public static WindowManager.LayoutParams getChildLayoutParams() {
+        return childLayoutParams;
+    }
 
-    //=============================================================
+    public static void setChildLayoutParams(WindowManager.LayoutParams params) {
+        childLayoutParams = params;
+    }
+
     /**
-     * set && get ConfigurationModel
+     * 配置相關
      */
-    //=============================================================
     public static FloatingConfigurationModel getConfigurationModel() {
-        return sm_configurationModel;
+        return configurationModel;
     }
 
     public static void setConfigurationModel(FloatingConfigurationModel model) {
-        sm_configurationModel = model;
+        configurationModel = model;
     }
 
-
-    //=============================================================
     /**
-     * set && get Screen Invalid Margin
+     * 尺寸和間距相關
      */
-    //=============================================================
     public static int getScreenInvalidMargin() {
-        return sm_nScreenInvalidMargin;
+        return screenInvalidMargin;
     }
 
-    public static void setScreenInvalidMargin(int screenInvalidMargin) {
-        FABManager.sm_nScreenInvalidMargin = screenInvalidMargin;
+    public static void setScreenInvalidMargin(int margin) {
+        screenInvalidMargin = margin;
     }
 
-
-    //=============================================================
-    /**
-     * set && get Spacing
-     */
-    //=============================================================
     public static int getSpacing() {
-        return sm_nSpacing;
+        return spacing;
     }
 
-    public static void setSpacing(int spacing) {
-        sm_nSpacing = spacing;
+    public static void setSpacing(int spacingValue) {
+        spacing = spacingValue;
     }
 
-
-    //=============================================================
-    /**
-     * set && get Side Length
-     */
-    //=============================================================
     public static int getSideLength() {
-        return sm_nSideLength;
+        return sideLength;
     }
 
-    public static void setSideLength(int imageLength) {
-        FABManager.sm_nSideLength = imageLength;
+    public static void setSideLength(int length) {
+        sideLength = length;
     }
 
-
-    //=============================================================
     /**
-     * set && get FromExternalInterface
+     * 外部介面相關
      */
-    //=============================================================
     public static boolean getFromExternalInterface() {
-        return sm_fromExternalInterface;
+        return fromExternalInterface;
     }
 
-    public static void setFromExternalInterface(boolean m_nRestoreDisplay) {
-        FABManager.sm_fromExternalInterface = m_nRestoreDisplay;
+    public static void setFromExternalInterface(boolean fromExternal) {
+        fromExternalInterface = fromExternal;
     }
 
-
-    //=============================================================
     /**
-     * set && get ChildLayoutParams
+     * 位置方向相關
      */
-    //=============================================================
-    public static WindowManager.LayoutParams getChildLayoutParams() {
-        return sm_childLayoutParams;
-    }
-
-    public static void setChildLayoutParams(WindowManager.LayoutParams childLayoutParams) {
-        FABManager.sm_childLayoutParams = childLayoutParams;
-    }
-
-
-    //=============================================================
-    /**
-     * isUp
-     */
-    //=============================================================
     public static boolean isUp() {
-        return sm_isUp;
+        return isUp;
     }
 
-    public static void setUp(boolean isUp) {
-        FABManager.sm_isUp = isUp;
+    public static void setUp(boolean up) {
+        isUp = up;
     }
 
 
 
-    //=============================================================
+    // ==================== 業務方法 ====================
+
     /**
-     * Close Floating Button
+     * 關閉浮動按鈕
+     * @param context 上下文
+     * @param callback 關閉回調
      */
-    //=============================================================
     public static void closeFloatingButton(Context context, CloseFloatingButtonCallback callback) {
+        Intent closeIntent = new Intent(FAB_CLOSE_ACTION);
+        closeIntent.setPackage(DeviceUtils.getPackageName(context));
+        context.sendBroadcast(closeIntent);
+        
+        if (callback != null) {
+            callback.onSuccess();
+        }
+    }
 
-        Intent startIntent = new Intent(FAB_CLOSE_ACTION);
-        startIntent.setPackage(DeviceUtils.getPackageName());
-        context.sendBroadcast(startIntent);
-
-        callback.onSuccess();
+    /**
+     * 重置所有狀態
+     * 用於清理靜態變數，防止記憶體洩漏
+     */
+    public static void reset() {
+        windowManager = null;
+        floatingLayoutParams = null;
+        deleteLayoutParams = null;
+        childLayoutParams = null;
+        configurationModel = null;
+        
+        screenInvalidMargin = 0;
+        lastLocationX = 0;
+        lastLocationY = 0;
+        
+        fromExternalInterface = false;
+        isServiceAlive = false;
+        isFloatingShowing = false;
+        isUp = false;
+        floatingStatus = FOLDING;
+        
+        spacing = 0;
+        sideLength = 0;
     }
 }

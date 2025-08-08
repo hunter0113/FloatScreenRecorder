@@ -86,7 +86,7 @@ public class RecordingActivity extends AppCompatActivity {
             RecordingManager.setUpData(resultCode, data);
 
         } else {
-            RecordingManager.getRecordingStatusCallback().onError(Constants.RECORD_USER_REFUSE_MSG);
+            RecordingManager.safelyCallRecordingStatusError(Constants.RECORD_USER_REFUSE_MSG);
         }
 
         finish();

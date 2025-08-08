@@ -184,8 +184,8 @@ public class PermissionActivity extends Activity {
      */
     //=============================================================
     private void permissionErrorHandle(String type) {
-        if (type.equals(LOOP_RECORD) && null != RecordingManager.getRecordingStatusCallback()) {
-            RecordingManager.getRecordingStatusCallback().onError(Constants.RECORD_USER_REFUSE_MSG);
+        if (type.equals(LOOP_RECORD)) {
+            RecordingManager.safelyCallRecordingStatusError(Constants.RECORD_USER_REFUSE_MSG);
         }
 
         finish();
