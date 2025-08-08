@@ -8,6 +8,7 @@ import android.content.Intent;
 
 import com.evan.floatscreenrecorder.common.manager.CallbackManager;
 import com.evan.floatscreenrecorder.common.util.DeviceUtils;
+import com.evan.floatscreenrecorder.common.util.ToastUtil;
 import com.evan.floatscreenrecorder.fab.activity.FABActivity;
 import com.evan.floatscreenrecorder.fab.manager.FABManager;
 import com.evan.floatscreenrecorder.fab.model.FloatingConfigurationModel;
@@ -39,6 +40,7 @@ public class EvanSDK {
     public static void init(Context context) {
         if (context != null) {
             DeviceUtils.init(context);
+            ToastUtil.init(context);
         }
     }
     

@@ -202,7 +202,7 @@ public class FABManager {
      */
     public static void closeFloatingButton(Context context, CloseFloatingButtonCallback callback) {
         Intent closeIntent = new Intent(FAB_CLOSE_ACTION);
-        closeIntent.setPackage(DeviceUtils.getPackageName());
+        closeIntent.setPackage(DeviceUtils.getPackageName(context));
         context.sendBroadcast(closeIntent);
         
         if (callback != null) {

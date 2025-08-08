@@ -869,7 +869,7 @@ public class FABService extends Service {
 
             if (FABManager.isFloatingShowing()) {
                 Intent startIntent = new Intent(FAB_HIDE_ACTION);
-                startIntent.setPackage(DeviceUtils.getPackageName());
+                startIntent.setPackage(DeviceUtils.getPackageName(FABService.this));
                 FABService.this.sendBroadcast(startIntent);
                 redisplayShow = true;
             }
@@ -890,7 +890,7 @@ public class FABService extends Service {
         @Override
         public void onSuccess(boolean status) {
             Intent startIntent = new Intent(FAB_RECORDING_STATUS_CALLBACK_SUCCESS_ACTION);
-            startIntent.setPackage(DeviceUtils.getPackageName());
+            startIntent.setPackage(DeviceUtils.getPackageName(FABService.this));
             getApplication().sendBroadcast(startIntent);
         }
 
@@ -898,7 +898,7 @@ public class FABService extends Service {
         public void onError(String recordMsg) {
 
             Intent startIntent = new Intent(FAB_RECORDING_STATUS_CALLBACK_ERROR_ACTION);
-            startIntent.setPackage(DeviceUtils.getPackageName());
+            startIntent.setPackage(DeviceUtils.getPackageName(FABService.this));
             startIntent.putExtra("recordMsg",recordMsg);
             getApplication().sendBroadcast(startIntent);
         }
@@ -923,7 +923,7 @@ public class FABService extends Service {
             }
 
             Intent startIntent = new Intent(FAB_DISPLAY_ACTION);
-            startIntent.setPackage(DeviceUtils.getPackageName());
+            startIntent.setPackage(DeviceUtils.getPackageName(FABService.this));
             FABService.this.sendBroadcast(startIntent);
             redisplayShow = false;
         }
@@ -941,7 +941,7 @@ public class FABService extends Service {
             }
 
             Intent startIntent = new Intent(FAB_DISPLAY_ACTION);
-            startIntent.setPackage(DeviceUtils.getPackageName());
+            startIntent.setPackage(DeviceUtils.getPackageName(FABService.this));
             FABService.this.sendBroadcast(startIntent);
             redisplayShow = false;
 
@@ -967,7 +967,8 @@ public class FABService extends Service {
      */
     //=============================================================
     private void showToast(String msg) {
-        ToastUtil.show(msg);
+        // 使用 Service 的 Context，避免依賴全域 Context
+        ToastUtil.showToast(this, msg);
     }
 
 
