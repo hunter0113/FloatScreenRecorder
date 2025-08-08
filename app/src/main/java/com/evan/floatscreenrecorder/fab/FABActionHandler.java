@@ -325,7 +325,7 @@ public class FABActionHandler {
                     // 判斷是否刪除FAB //
                     if (isWhetherToDelete()) {
                         Intent startIntent = new Intent(FAB_CLOSE_ACTION);
-                        startIntent.setPackage(DeviceUtils.getPackageName());
+                        startIntent.setPackage(DeviceUtils.getPackageName(onTouchLContext));
                         onTouchLContext.sendBroadcast(startIntent);
                         CallbackManager.getNativeFloatingButtonCallback().onClose(FAB_REMOVE_MESSAGE);
                         break;

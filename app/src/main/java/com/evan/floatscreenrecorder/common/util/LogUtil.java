@@ -3,18 +3,6 @@ package com.evan.floatscreenrecorder.common.util;
 import android.util.Log;
 
 
-/**
- * Created by Bruce on 2020/7/23.
- * <p>
- * Description：
- * 1. common log:
- * 2. if log :
- * a. If() -> if true log it,
- * b. or() -> if false log it,
- * c. and() -> always log it.
- * <p>
- * 3. debug log -> only log on debug mode
- */
 
 public class LogUtil {
 

@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         EvanSDK.init(this);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-
     }
 
     public void setOnClick(){
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btn_hideFAB.setOnClickListener(v -> {
-                EvanSDK.setFloatingButtonDisplay(MainActivity.this, false);
+            EvanSDK.setFloatingButtonDisplay(MainActivity.this, false);
         });
     }
 }

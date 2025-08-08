@@ -56,12 +56,6 @@ public class FABActivity extends Activity {
     //=============================================================
     private void showFloatingButton() {
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            showToast("不支援此裝置");
-            finish();
-            return;
-        }
-
         if (!Settings.canDrawOverlays(FABActivity.this)) {
             setPermissionDialog();
             permissionDialog.show();
@@ -96,9 +90,7 @@ public class FABActivity extends Activity {
         }).setPositiveButton("確認", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), FLOATING_PERMISSION_REQUEST_CODE);
-                }
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), FLOATING_PERMISSION_REQUEST_CODE);
             }
         }).setCancelable(false).create();
     }
@@ -113,7 +105,8 @@ public class FABActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ToastUtil.show(msg);
+                // 使用當前 Activity 的 Context，避免依賴全域 Context
+                ToastUtil.showToast(FABActivity.this, msg);
             }
         });
     }
@@ -131,7 +124,7 @@ public class FABActivity extends Activity {
         } else {
             startIntent = new Intent(FAB_HIDE_ACTION);
         }
-        startIntent.setPackage(DeviceUtils.getPackageName());
+        startIntent.setPackage(DeviceUtils.getPackageName(activity));
         activity.sendBroadcast(startIntent);
     }
 
