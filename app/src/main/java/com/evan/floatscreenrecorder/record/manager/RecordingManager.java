@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.evan.floatscreenrecorder.common.constant.RecordingConstants;
 import com.evan.floatscreenrecorder.record.callback.OutputVideoCallback;
 import com.evan.floatscreenrecorder.record.callback.RecordingStatusCallback;
 import com.evan.floatscreenrecorder.record.callback.ShareVideoCallback;
@@ -33,7 +34,7 @@ public class RecordingManager {
     private static RecordingService sm_ScreenRecordService;
 
     // Total Recording Size //
-    private static int sm_nRecord_Capacity = 30;
+    private static int sm_nRecord_Capacity = RecordingConstants.DEFAULT_RECORD_CAPACITY_SECONDS;
 
     // Final File URI //
     private static Uri sm_ManagerFinalFile_URI;

@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.evan.floatscreenrecorder.common.constant.Constants;
 import com.evan.floatscreenrecorder.common.constant.PermissionType;
+import com.evan.floatscreenrecorder.common.constant.RecordingConstants;
 import com.evan.floatscreenrecorder.common.util.PermissionUtils;
 import com.evan.floatscreenrecorder.record.manager.RecordingManager;
 
@@ -103,7 +104,7 @@ public class PermissionActivity extends Activity {
         if (type.equals(NOTIFICATIONS)) {
             // 通知無自定義視窗供跳轉
             finish();
-            overridePendingTransition(0, 0);
+            overridePendingTransition(RecordingConstants.TRANSITION_NO_ANIMATION, RecordingConstants.TRANSITION_NO_ANIMATION);
             return;
         }
 

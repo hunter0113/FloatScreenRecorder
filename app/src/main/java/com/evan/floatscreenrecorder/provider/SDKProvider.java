@@ -33,6 +33,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.evan.floatscreenrecorder.EvanSDK;
+import com.evan.floatscreenrecorder.common.constant.RecordingConstants;
 import com.evan.floatscreenrecorder.common.util.DeviceUtils;
 import com.evan.floatscreenrecorder.common.util.ToastUtil;
 import com.evan.floatscreenrecorder.fab.manager.FABManager;
@@ -80,7 +81,7 @@ public class SDKProvider extends ContentProvider implements LifecycleObserver {
                         }
                         m_fromBackground = false;
                     }
-                }, 500);
+                }, RecordingConstants.BACKGROUND_RETURN_DELAY);
             }
 
             @Override
