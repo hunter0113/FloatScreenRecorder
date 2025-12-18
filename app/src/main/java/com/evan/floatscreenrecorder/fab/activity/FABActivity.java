@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.evan.floatscreenrecorder.common.constant.RecordingConstants;
 import com.evan.floatscreenrecorder.common.manager.CallbackManager;
 import com.evan.floatscreenrecorder.common.util.DeviceUtils;
 import com.evan.floatscreenrecorder.common.util.ToastUtil;
@@ -35,7 +36,7 @@ public class FABActivity extends Activity {
     /**
      * Construct
      */
-    private final int FLOATING_PERMISSION_REQUEST_CODE = 0;
+    private final int FLOATING_PERMISSION_REQUEST_CODE = RecordingConstants.FLOATING_PERMISSION_REQUEST_CODE;
     private AlertDialog permissionDialog;
 
 
@@ -84,7 +85,7 @@ public class FABActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 CallbackManager.getNativeFloatingButtonCallback().onError(RECORD_USER_REFUSE_MSG);
                 finish();
-                overridePendingTransition(0, 0);
+                overridePendingTransition(RecordingConstants.TRANSITION_NO_ANIMATION, RecordingConstants.TRANSITION_NO_ANIMATION);
             }
 
         }).setPositiveButton("確認", new DialogInterface.OnClickListener() {

@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
+import com.evan.floatscreenrecorder.common.constant.RecordingConstants;
 import com.evan.floatscreenrecorder.common.manager.CallbackManager;
 import com.evan.floatscreenrecorder.common.util.DeviceUtils;
 import com.evan.floatscreenrecorder.fab.manager.FABManager;
@@ -69,7 +70,7 @@ public class FABActionHandler {
     /**
      * 動畫時長
      */
-    private final int m_nDuration = 500;
+    private final int m_nDuration = RecordingConstants.FAB_ANIMATION_DURATION_MS;
 
     /**
      * ImageView
@@ -147,8 +148,8 @@ public class FABActionHandler {
         getDeleteLayoutParams().height = getSideLength();
 
         // 固定中心為螢幕高*0.8，寬為中心點, deleteCenterPointX、deleteCenterPointY //
-        getDeleteLayoutParams().x = FABScreenManager.getScreenWidth() / 2 - getSideLength() / 2;
-        getDeleteLayoutParams().y = (int) (FABScreenManager.getScreenHeight() * 0.8) - getSideLength() / 2;
+        getDeleteLayoutParams().x = FABScreenManager.getScreenWidth() / RecordingConstants.SCREEN_CENTER_DIVISOR - getSideLength() / RecordingConstants.SCREEN_CENTER_DIVISOR;
+        getDeleteLayoutParams().y = (int) (FABScreenManager.getScreenHeight() * RecordingConstants.FAB_DELETE_AREA_CENTER_RATIO) - getSideLength() / RecordingConstants.SCREEN_CENTER_DIVISOR;
     }
 
 
@@ -300,9 +301,9 @@ public class FABActionHandler {
                     getWindowManager().updateViewLayout(optionImageView, params);
 
 
-                    FABManager.setUp(params.y < (FABScreenManager.getScreenHeight() / 2 - getSideLength() / 2));
+                    FABManager.setUp(params.y < (FABScreenManager.getScreenHeight() / RecordingConstants.SCREEN_CENTER_DIVISOR - getSideLength() / RecordingConstants.SCREEN_CENTER_DIVISOR));
 
-                    if (!m_isShowDelete && (Math.abs(x - m_nTouchStartX) > 5 || Math.abs(y - m_nTouchStartY) > 5)) {
+                    if (!m_isShowDelete && (Math.abs(x - m_nTouchStartX) > RecordingConstants.FAB_TOUCH_MOVE_THRESHOLD || Math.abs(y - m_nTouchStartY) > RecordingConstants.FAB_TOUCH_MOVE_THRESHOLD)) {
                         deleteImageView.setVisibility(VISIBLE);
                         m_isShowDelete = true;
                     }
@@ -472,7 +473,7 @@ public class FABActionHandler {
      */
     //=============================================================
     private boolean isClick(int x, int y) {
-        return Math.abs(x - m_nTouchStartX) <= 5 && Math.abs(y - m_nTouchStartY) <= 5;
+        return Math.abs(x - m_nTouchStartX) <= RecordingConstants.FAB_TOUCH_MOVE_THRESHOLD && Math.abs(y - m_nTouchStartY) <= RecordingConstants.FAB_TOUCH_MOVE_THRESHOLD;
     }
 
 
@@ -513,7 +514,7 @@ public class FABActionHandler {
         m_isAnimation = true;
 
         ValueAnimator valueAnimator;
-        if (getFloatingLayoutParams().x < FABScreenManager.getScreenWidth() / 2) {
+        if (getFloatingLayoutParams().x < FABScreenManager.getScreenWidth() / RecordingConstants.SCREEN_CENTER_DIVISOR) {
             valueAnimator = ValueAnimator.ofInt(getFloatingLayoutParams().x, getScreenInvalidMargin());
             // For Provider
             FABManager.setLastLocationX(getScreenInvalidMargin());

@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import androidx.annotation.Nullable;
 
 
+import com.evan.floatscreenrecorder.common.constant.RecordingConstants;
 import com.evan.floatscreenrecorder.common.util.FileUtil;
 import com.evan.floatscreenrecorder.record.manager.RecordingManager;
 import com.evan.floatscreenrecorder.record.service.RecordingService;
@@ -30,7 +31,7 @@ import java.util.concurrent.Executors;
 
 public class ShareVideoActivity extends Activity {
 
-    private final static int SHARE_REQUEST_CODE = 1;
+    private final static int SHARE_REQUEST_CODE = RecordingConstants.SHARE_REQUEST_CODE;
     private final static int SHARE_REQUEST_BROADCAST_RECEIVER_CODE = 10;
 
 
@@ -80,7 +81,7 @@ public class ShareVideoActivity extends Activity {
 
         RecordingManager.safelyCallShareVideoFinish();
         finish();
-        overridePendingTransition(0, 0);
+        overridePendingTransition(RecordingConstants.TRANSITION_NO_ANIMATION, RecordingConstants.TRANSITION_NO_ANIMATION);
     }
 
 
