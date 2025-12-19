@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -53,6 +54,7 @@ import java.util.concurrent.Executors;
 
 public class RecordingService extends Service implements Handler.Callback {
 
+    private final String TAG = "RecordingService";
 
     /**
      * Media Construct
@@ -256,6 +258,11 @@ public class RecordingService extends Service implements Handler.Callback {
         try {
             m_MediaRecorder.prepare();
         } catch (IOException e) {
+            Log.e(TAG, "Failed to prepare MediaRecorder", e);
+            RecordingManager.safelyCallRecordingStatusError(
+                    "Failed to prepare recorder: " + e.getMessage()
+            );
+            return; // 或 throw RuntimeException
         }
     }
 
@@ -297,12 +304,16 @@ public class RecordingService extends Service implements Handler.Callback {
 
         // output Record Handle //
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                outputRecordHandle(context);
-            }
-        });
+        try {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    outputRecordHandle(context);
+                }
+            });
+        } finally {
+            executor.shutdown();
+        }
     }
 
 

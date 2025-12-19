@@ -20,7 +20,7 @@ import com.evan.floatscreenrecorder.record.manager.RecordingManager;
 import com.evan.floatscreenrecorder.record.service.RecordingService;
 
 import java.io.File;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -59,23 +59,27 @@ public class ShareVideoActivity extends Activity {
 
         // 小於Android 10 以下 需刪除分享用的Uri檔案(即初始檔案)，僅留下複製後的檔案。
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            Executor executor = Executors.newSingleThreadExecutor();
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    RecordingService.deleteFinalFile();
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            try {
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        RecordingService.deleteFinalFile();
 
-                    ContentResolver resolver = getContentResolver();
-                    String str = getFilePathFromContentUri(RecordingManager.getManagerFinalFileUri(), resolver);
-                    File file = new File(str);
-                    FileUtil.deleteSDFile(file.getAbsolutePath());
-                    MediaScannerConnection.scanFile(getApplicationContext(), new String[]{file.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
-                        @Override
-                        public void onScanCompleted(String path, Uri uri) {
-                        }
-                    });
-                }
-            });
+                        ContentResolver resolver = getContentResolver();
+                        String str = getFilePathFromContentUri(RecordingManager.getManagerFinalFileUri(), resolver);
+                        File file = new File(str);
+                        FileUtil.deleteSDFile(file.getAbsolutePath());
+                        MediaScannerConnection.scanFile(getApplicationContext(), new String[]{file.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                            @Override
+                            public void onScanCompleted(String path, Uri uri) {
+                            }
+                        });
+                    }
+                });
+            } finally {
+                executor.shutdown();
+            }
         }
 
 

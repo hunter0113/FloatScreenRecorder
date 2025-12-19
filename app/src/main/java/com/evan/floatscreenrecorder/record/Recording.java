@@ -20,7 +20,7 @@ import com.evan.floatscreenrecorder.record.callback.RecordingStatusCallback;
 import com.evan.floatscreenrecorder.record.callback.ShareVideoCallback;
 import com.evan.floatscreenrecorder.record.manager.RecordingManager;
 
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -93,13 +93,17 @@ public class Recording {
      */
     //=============================================================
     public static void stopLoopRecording(RecordingStatusCallback callback) {
-        Executor executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                RecordingManager.stopRecord(callback);
-            }
-        });
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    RecordingManager.stopRecord(callback);
+                }
+            });
+        } finally {
+            executor.shutdown();
+        }
     }
 
 
