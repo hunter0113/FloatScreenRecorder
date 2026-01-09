@@ -7,12 +7,6 @@ package com.evan.floatscreenrecorder.common.constant;
 public final class RecordingConstants {
     
     // ==================== 錄製時長相關常數 ====================
-    /** 預設錄製容量（秒） */
-    public static final int DEFAULT_RECORD_CAPACITY_SECONDS = 30;
-    /** 錄製分段時長（秒） */
-    public static final int RECORDING_SEGMENT_DURATION = 30;
-    /** 最大錄製時長（秒） */
-    public static final int RECORDING_MAX_DURATION = 300;
     /** 最小錄製時長（秒）- 用於驗證錄製是否有效 */
     public static final int MIN_RECORD_DURATION_SECONDS = 2;
     /** 單一檔案最小錄製時長（秒） */
@@ -58,12 +52,6 @@ public final class RecordingConstants {
     /** 刪除區域中心位置比例（螢幕高度的百分比） */
     public static final double FAB_DELETE_AREA_CENTER_RATIO = 0.8;
     
-    // ==================== 動畫相關常數 ====================
-    /** 動畫時長（毫秒） */
-    public static final int ANIMATION_DURATION = 300;
-    /** 動畫延遲（毫秒） */
-    public static final int ANIMATION_DELAY = 100;
-    
     // ==================== 檔案相關常數 ====================
     /** 視訊檔案副檔名 */
     public static final String VIDEO_EXTENSION = ".mp4";
@@ -73,15 +61,7 @@ public final class RecordingConstants {
     public static final String DATE_FORMAT = "yyyy-MM-dd-HH-mm-ss";
     /** 日期時間格式（簡化版） */
     public static final String DATE_FORMAT_SIMPLE = "yyyyMMdd_HHmmss";
-    
-    // ==================== 通知相關常數 ====================
-    /** 通知 ID */
-    public static final int NOTIFICATION_ID = 11235;
-    /** 通知頻道 ID */
-    public static final String NOTIFICATION_CHANNEL_ID = "notification_channel_id";
-    /** 通知頻道名稱 */
-    public static final String NOTIFICATION_CHANNEL_NAME = "螢幕錄製";
-    
+
     // ==================== 權限請求碼 ====================
     /** 通用權限請求碼 */
     public static final int PERMISSION_REQUEST_CODE = 312;
