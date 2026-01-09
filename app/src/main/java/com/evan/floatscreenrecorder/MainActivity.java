@@ -1,7 +1,6 @@
 package com.evan.floatscreenrecorder;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -9,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.evan.floatscreenrecorder.fab.model.FloatingConfigurationModel;
 import com.evan.floatscreenrecorder.record.callback.NativeFloatingButtonCallback;
-import com.evan.floatscreenrecorder.record.callback.OutputVideoCallback;
-import com.evan.floatscreenrecorder.record.callback.RecordingStatusCallback;
 
 public class MainActivity extends AppCompatActivity {
 

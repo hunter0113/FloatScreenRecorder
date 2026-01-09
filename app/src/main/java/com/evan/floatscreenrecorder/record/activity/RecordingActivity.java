@@ -53,7 +53,6 @@ public class RecordingActivity extends AppCompatActivity {
                     return;
                 }
 
-                RecordingManager.setRecordCapacity(RecordingConstants.DEFAULT_RECORD_CAPACITY_SECONDS);
                 RecordingManager.startScreenRecord(RecordingActivity.this, REQUEST_CODE);
                 LiveDataManager.recordingServiceLiveData.removeObserver(this);
             }
