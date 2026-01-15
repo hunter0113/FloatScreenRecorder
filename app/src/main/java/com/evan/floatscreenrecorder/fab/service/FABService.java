@@ -438,7 +438,7 @@ public class FABService extends Service {
         Bitmap bp;
         switch (type) {
             case DEFAULT_OPTION_IMAGE:
-                bp = BitmapFactory.decodeResource(getResources(), R.mipmap.img);
+                bp = getBitmapFromVectorDrawable(this, R.drawable.ic_fab_option);
                 break;
 
             case DEFAULT_DELETE_IMAGE:

@@ -4,7 +4,7 @@
     android:viewportWidth="90"
     android:viewportHeight="90">
     
-    <!-- 外層圓形背景（灰色，代表停止） -->
+    <!-- 外層圓形背景（灰色，代表選項） -->
     <path
         android:pathData="M45,8C24.12,8 7,25.12 7,46C7,66.88 24.12,84 45,84C65.88,84 83,66.88 83,46C83,25.12 65.88,8 45,8Z"
         android:fillColor="#8E8E93"
@@ -16,9 +16,22 @@
         android:fillColor="#6D6D70"
         android:strokeColor="#00000000"/>
     
-    <!-- 停止方形（白色） -->
+    <!-- 三條橫線圖標（漢堡選單樣式） -->
+    <!-- 第一條橫線 -->
     <path
-        android:pathData="M35,35L35,53L55,53L55,35L35,35Z"
+        android:pathData="M20,28L70,28L70,38L20,38L20,28Z"
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#00000000"/>
+    
+    <!-- 第二條橫線（中間） -->
+    <path
+        android:pathData="M20,43L70,43L70,53L20,53L20,43Z"
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#00000000"/>
+    
+    <!-- 第三條橫線 -->
+    <path
+        android:pathData="M20,58L70,58L70,68L20,68L20,58Z"
         android:fillColor="#FFFFFF"
         android:strokeColor="#00000000"/>
 </vector>
