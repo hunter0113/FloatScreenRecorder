@@ -39,7 +39,6 @@ public class Constants {
     public static final String DEFAULT_START_IMAGE = "StartImage";
     public static final String DEFAULT_CANCEL_IMAGE = "CancelImage";
     public static final String DEFAULT_SHARE_IMAGE = "ShareImage";
-    public static final String DEFAULT_CUSTOMER_SERVICE_IMAGE = "CustomerServiceImage";
     public static final String DEFAULT_CUSTOM_IMAGE = "CustomImage";
 
 

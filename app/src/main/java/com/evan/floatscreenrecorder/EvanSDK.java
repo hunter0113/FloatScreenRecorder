@@ -55,7 +55,7 @@ public class EvanSDK {
     }
 
     /**
-     * 分享錄制視頻
+     * 分享錄制影片
      * @param context 上下文
      * @param callback 結果回調
      */

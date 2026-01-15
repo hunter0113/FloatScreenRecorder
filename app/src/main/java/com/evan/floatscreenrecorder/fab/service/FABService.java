@@ -95,7 +95,6 @@ public class FABService extends Service {
     private ImageView deleteImageView;
     private ImageView recordImageView;
     private ImageView shareImageView;
-    private ImageView customerServiceImageView;
 
 
     /**
@@ -104,7 +103,6 @@ public class FABService extends Service {
     private Bitmap startRecordImageBmp;
     private Bitmap cancelRecordImageBmp;
     private Bitmap shareImageBmp;
-    private Bitmap customerServiceImageBmp;
     private Bitmap optionImageBmp;
     private Bitmap deleteImageBmp;
 
@@ -114,7 +112,6 @@ public class FABService extends Service {
      */
     private static final int RECORD_TYPE = 0;
     private static final int SHARE_TYPE = 1;
-    private static final int CUSTOMER_TYPE = 2;
 
 
     /**
@@ -268,24 +265,19 @@ public class FABService extends Service {
                 startRecordImageBmp = LocalJsonUtils.readerLocalImage(this, sm_configModel.getStartRecordVideoImage());
                 cancelRecordImageBmp = LocalJsonUtils.readerLocalImage(this, sm_configModel.getCancelRecordVideoImage());
                 shareImageBmp = LocalJsonUtils.readerLocalImage(this, sm_configModel.getShareImage());
-                customerServiceImageBmp = LocalJsonUtils.readerLocalImage(this, sm_configModel.getCustomerServiceImage());
 
                 // init ImageView //
                 recordImageView = initImageView();
                 shareImageView = initImageView();
-                customerServiceImageView = initImageView();
 
                 setCircleImage(RECORD_TYPE);
                 setCircleImage(SHARE_TYPE);
-                setCircleImage(CUSTOMER_TYPE);
 
                 setListener(RECORD_TYPE);
                 setListener(SHARE_TYPE);
-                setListener(CUSTOMER_TYPE);
 
                 childImageViews.add(recordImageView);
                 childImageViews.add(shareImageView);
-                childImageViews.add(customerServiceImageView);
 
                 break;
 
@@ -306,18 +298,6 @@ public class FABService extends Service {
                 childImageViews.add(recordImageView);
                 childImageViews.add(shareImageView);
 
-                break;
-
-            case CUSTOMER_SERVICE:
-                customerServiceImageBmp = LocalJsonUtils.readerLocalImage(this, sm_configModel.getCustomerServiceImage());
-
-                customerServiceImageView = initImageView();
-
-                setCircleImage(CUSTOMER_TYPE);
-
-                setListener(CUSTOMER_TYPE);
-
-                childImageViews.add(customerServiceImageView);
                 break;
         }
     }
@@ -458,7 +438,7 @@ public class FABService extends Service {
         Bitmap bp;
         switch (type) {
             case DEFAULT_OPTION_IMAGE:
-                bp = BitmapFactory.decodeResource(getResources(), R.mipmap.img);
+                bp = getBitmapFromVectorDrawable(this, R.drawable.ic_fab_option);
                 break;
 
             case DEFAULT_DELETE_IMAGE:
@@ -475,10 +455,6 @@ public class FABService extends Service {
 
             case DEFAULT_SHARE_IMAGE:
                 bp = getBitmapFromVectorDrawable(this, R.drawable.ic_fab_share);
-                break;
-
-            case DEFAULT_CUSTOMER_SERVICE_IMAGE:
-                bp = getBitmapFromVectorDrawable(this, R.drawable.ic_fab_customer_service);
                 break;
 
             case DEFAULT_CUSTOM_IMAGE:
@@ -716,10 +692,6 @@ public class FABService extends Service {
 
             case SHARE_TYPE:
                 circleImageHandle(shareImageView, shareImageBmp, DEFAULT_SHARE_IMAGE);
-                break;
-
-            case CUSTOMER_TYPE:
-                circleImageHandle(customerServiceImageView, customerServiceImageBmp, DEFAULT_CUSTOMER_SERVICE_IMAGE);
                 break;
         }
     }
@@ -982,7 +954,6 @@ public class FABService extends Service {
         MemoryManager.recycleBitmap(startRecordImageBmp);
         MemoryManager.recycleBitmap(cancelRecordImageBmp);
         MemoryManager.recycleBitmap(shareImageBmp);
-        MemoryManager.recycleBitmap(customerServiceImageBmp);
         MemoryManager.recycleBitmap(optionImageBmp);
         MemoryManager.recycleBitmap(deleteImageBmp);
 
@@ -990,13 +961,11 @@ public class FABService extends Service {
         recycleImageView(deleteImageView);
         recycleImageView(recordImageView);
         recycleImageView(shareImageView);
-        recycleImageView(customerServiceImageView);
 
         optionImageView = null;
         deleteImageView = null;
         recordImageView = null;
         shareImageView = null;
-        customerServiceImageView = null;
 
         unregisterReceiver(receiver);
         super.onDestroy();

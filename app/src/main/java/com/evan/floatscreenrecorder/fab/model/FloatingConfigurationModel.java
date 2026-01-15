@@ -33,7 +33,6 @@ public class FloatingConfigurationModel {
      *     "StartRecordVideoImage": "<Image Path>",
      *     "CancelRecordVideoImage": "<Image Path>",
      *     "ShareImage": "<Image Path>",
-     *     "CustomerServiceImage": "<Image Path>",
      *     "OptionImage": "<Image Path>",
      *     "DeleteImage": "<Image Path>",
      *     "CloseAlert": "close",
@@ -42,8 +41,7 @@ public class FloatingConfigurationModel {
      *               { "<Image Path>" }
      *           ]
      *
-     *     "RecordingStatusCallback": recordingStatusCallback,
-     *     "CustomerServiceCallback": customerServiceCallback
+     *     "RecordingStatusCallback": recordingStatusCallback
      * }
      */
 
@@ -56,7 +54,6 @@ public class FloatingConfigurationModel {
     private String StartRecordVideoImage;
     private String CancelRecordVideoImage;
     private String ShareImage;
-    private String CustomerServiceImage;
     private String OptionImage;
     private String DeleteImage;
     private ArrayList<String> CustomizedChildButtonImageList;
@@ -96,14 +93,6 @@ public class FloatingConfigurationModel {
 
     public void setShareImage(String shareImage) {
         this.ShareImage = shareImage;
-    }
-
-    public String getCustomerServiceImage() {
-        return CustomerServiceImage;
-    }
-
-    public void setCustomerServiceImage(String customerServiceImage) {
-        this.CustomerServiceImage = customerServiceImage;
     }
 
     public int getCustomizedNumberOfChildButtons() {
