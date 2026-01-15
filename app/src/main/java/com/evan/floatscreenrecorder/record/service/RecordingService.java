@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -27,6 +28,7 @@ import androidx.core.app.NotificationCompat;
 import com.evan.floatscreenrecorder.R;
 import com.evan.floatscreenrecorder.common.constant.Constants;
 import com.evan.floatscreenrecorder.common.constant.RecordErrorType;
+import com.evan.floatscreenrecorder.common.constant.RecordingConstants;
 import com.evan.floatscreenrecorder.common.util.FileUtil;
 import com.evan.floatscreenrecorder.record.activity.ShareVideoActivity;
 import com.evan.floatscreenrecorder.record.callback.RecordingStatusCallback;
@@ -52,6 +54,7 @@ import java.util.concurrent.Executors;
 
 public class RecordingService extends Service implements Handler.Callback {
 
+    private final String TAG = "RecordingService";
 
     /**
      * Media Construct
@@ -134,11 +137,11 @@ public class RecordingService extends Service implements Handler.Callback {
         intent.setAction(RECORD_STOP_ACTION);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            pendingIntent = PendingIntent.getService(this, 0,
+            pendingIntent = PendingIntent.getService(this, RecordingConstants.PENDING_INTENT_REQUEST_CODE,
                     intent,
                     PendingIntent.FLAG_MUTABLE);
         } else {
-            pendingIntent = PendingIntent.getService(this, 0,
+            pendingIntent = PendingIntent.getService(this, RecordingConstants.PENDING_INTENT_REQUEST_CODE,
                     intent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
         }
@@ -213,13 +216,13 @@ public class RecordingService extends Service implements Handler.Callback {
     private void setUpMediaRecorder() {
         String m_saveDirectory = FileUtil.getSaveDirectory(this);
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
+        SimpleDateFormat df = new SimpleDateFormat(RecordingConstants.DATE_FORMAT, Locale.getDefault());
 
         Date dateA = new Date();
         String timeA = df.format(dateA);
-        String timeB = df.format(addSeconds(dateA, 1));
-        String timeC = df.format(addSeconds(dateA, 2));
-        String timeFinal = df.format(addSeconds(dateA, 3));
+        String timeB = df.format(addSeconds(dateA, RecordingConstants.FILE_TIME_OFFSET_B));
+        String timeC = df.format(addSeconds(dateA, RecordingConstants.FILE_TIME_OFFSET_C));
+        String timeFinal = df.format(addSeconds(dateA, RecordingConstants.FILE_TIME_OFFSET_FINAL));
 
 
         m_RecordFilePath_A = m_saveDirectory + File.separator + timeA + DOT_MP4;
@@ -227,8 +230,8 @@ public class RecordingService extends Service implements Handler.Callback {
 
 
         // 參數變為預設 //
-        m_RecordAllSeconds = 0;
-        m_SingleRecordSeconds = 0;
+        m_RecordAllSeconds = RecordingConstants.INITIAL_RECORD_SECONDS;
+        m_SingleRecordSeconds = RecordingConstants.INITIAL_RECORD_SECONDS;
 
 
         // DEFAULT,MIC 聲音內外皆有 //
@@ -241,20 +244,25 @@ public class RecordingService extends Service implements Handler.Callback {
         m_MediaRecorder.setVideoSize(m_iRecordWidth, m_iRecordHeight);
         m_MediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
         m_MediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        m_MediaRecorder.setAudioEncodingBitRate(128000);
-        m_MediaRecorder.setAudioSamplingRate(44100);
+        m_MediaRecorder.setAudioEncodingBitRate(RecordingConstants.AUDIO_BITRATE);
+        m_MediaRecorder.setAudioSamplingRate(RecordingConstants.AUDIO_SAMPLE_RATE);
 
 
         // setVideoEncodingBitRate //
         // https://support.google.com/youtube/answer/1722171?hl=en#zippy=%2Cbitrate //
         // BitRate 8百萬為1080p, 5百萬為720p //
-        m_MediaRecorder.setVideoEncodingBitRate(8000000);
-        m_MediaRecorder.setCaptureRate(24);
-        m_MediaRecorder.setVideoFrameRate(24);
+        m_MediaRecorder.setVideoEncodingBitRate(RecordingConstants.VIDEO_BITRATE_1080P);
+        m_MediaRecorder.setCaptureRate(RecordingConstants.VIDEO_CAPTURE_RATE);
+        m_MediaRecorder.setVideoFrameRate(RecordingConstants.VIDEO_FRAME_RATE);
 
         try {
             m_MediaRecorder.prepare();
         } catch (IOException e) {
+            Log.e(TAG, "Failed to prepare MediaRecorder", e);
+            RecordingManager.safelyCallRecordingStatusError(
+                    "Failed to prepare recorder: " + e.getMessage()
+            );
+            return; // 或 throw RuntimeException
         }
     }
 
@@ -270,7 +278,7 @@ public class RecordingService extends Service implements Handler.Callback {
         createVirtualDisplay();
         m_MediaRecorder.start();
 
-        m_Handler.sendEmptyMessageDelayed(MSG_TYPE_COUNT_DOWN, 0);
+        m_Handler.sendEmptyMessageDelayed(MSG_TYPE_COUNT_DOWN, RecordingConstants.HANDLER_SEND_IMMEDIATELY);
 
         RecordingManager.setIsRecording(true);
 
@@ -289,19 +297,23 @@ public class RecordingService extends Service implements Handler.Callback {
         stopForeground(true);
 
         // The video needs to have a basic length //
-        if (m_RecordAllSeconds <= 2) {
+        if (m_RecordAllSeconds <= RecordingConstants.MIN_RECORD_DURATION_SECONDS) {
             outputRecordErrorHandle();
             return;
         }
 
         // output Record Handle //
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                outputRecordHandle(context);
-            }
-        });
+        try {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    outputRecordHandle(context);
+                }
+            });
+        } finally {
+            executor.shutdown();
+        }
     }
 
 
@@ -326,7 +338,7 @@ public class RecordingService extends Service implements Handler.Callback {
         stopAndRelease();
 
         // 換檔案後，新檔案儲存不到兩秒，只保留另一個檔案，不做合併 //
-        if(m_SingleRecordSeconds < 2){
+        if(m_SingleRecordSeconds < RecordingConstants.MIN_SINGLE_FILE_DURATION_SECONDS){
             return;
         }
 
@@ -373,7 +385,7 @@ public class RecordingService extends Service implements Handler.Callback {
             m_RecordAllSeconds++;
             m_SingleRecordSeconds++;
 
-            m_Handler.sendEmptyMessageDelayed(MSG_TYPE_COUNT_DOWN, 1000);
+            m_Handler.sendEmptyMessageDelayed(MSG_TYPE_COUNT_DOWN, RecordingConstants.COUNTDOWN_INTERVAL_MS);
         }
         return true;
     }

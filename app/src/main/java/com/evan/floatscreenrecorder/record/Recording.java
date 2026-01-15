@@ -14,13 +14,11 @@ import android.os.Build;
 import com.evan.floatscreenrecorder.common.constant.Constants;
 import com.evan.floatscreenrecorder.common.util.FileUtil;
 import com.evan.floatscreenrecorder.record.activity.PermissionActivity;
-import com.evan.floatscreenrecorder.record.callback.GetRecordingStatusCallback;
-import com.evan.floatscreenrecorder.record.callback.OutputVideoCallback;
 import com.evan.floatscreenrecorder.record.callback.RecordingStatusCallback;
 import com.evan.floatscreenrecorder.record.callback.ShareVideoCallback;
 import com.evan.floatscreenrecorder.record.manager.RecordingManager;
 
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -93,44 +91,19 @@ public class Recording {
      */
     //=============================================================
     public static void stopLoopRecording(RecordingStatusCallback callback) {
-        Executor executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                RecordingManager.stopRecord(callback);
-            }
-        });
-    }
-
-
-
-    //=============================================================
-    /**
-     * Get LoopRecording Status
-     */
-    //=============================================================
-    public static void getLoopRecordingStatus(GetRecordingStatusCallback callback) {
-        callback.onSuccess(RecordingManager.getIsRecording());
-    }
-
-
-    //=============================================================
-    /**
-     * Output Record Video
-     */
-    //=============================================================
-    public static void outputRecordVideo(OutputVideoCallback callback) {
-        if (!RecordingManager.getIsRecording()) {
-            callback.onError(Constants.RECORD_NOT_TURNED_ON_MSG);
-            return;
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    RecordingManager.stopRecord(callback);
+                }
+            });
+        } finally {
+            executor.shutdown();
         }
-
-        // clear Callback //
-        RecordingManager.clearAllCallback();
-
-        RecordingManager.setOutputVideoCallback(callback);
-        RecordingManager.outputRecord(null);
     }
+
 
 
     //=============================================================

@@ -11,7 +11,6 @@ public enum FloatingOptionsType {
 
     ALL_OPTIONS(0),
     RECORD_VIDEO(1),
-    CUSTOMER_SERVICE(2),
     ;
 
 

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.evan.floatscreenrecorder.common.constant.RecordingConstants;
 import com.evan.floatscreenrecorder.record.callback.OutputVideoCallback;
 import com.evan.floatscreenrecorder.record.callback.RecordingStatusCallback;
 import com.evan.floatscreenrecorder.record.callback.ShareVideoCallback;
@@ -31,9 +32,6 @@ public class RecordingManager {
      */
     //=============================================================
     private static RecordingService sm_ScreenRecordService;
-
-    // Total Recording Size //
-    private static int sm_nRecord_Capacity = 30;
 
     // Final File URI //
     private static Uri sm_ManagerFinalFile_URI;
@@ -109,19 +107,7 @@ public class RecordingManager {
             new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(filePath));
         }
     }
-
-    //=============================================================
-    /**
-     * Output Video（Error）
-     * @param errorMsg 錯誤信息
-     */
-    //=============================================================
-    public static void safelyCallOutputVideoError(String errorMsg) {
-        OutputVideoCallback callback = getOutputVideoCallback();
-        if (callback != null) {
-            new Handler(Looper.getMainLooper()).post(() -> callback.onError(errorMsg));
-        }
-    }
+    
 
     //=============================================================
     /**
@@ -161,10 +147,6 @@ public class RecordingManager {
         return sm_ScreenRecordService;
     }
 
-    public static void setRecordCapacity(int capacity) {
-        sm_nRecord_Capacity = capacity;
-    }
-
     public static String getManagerFinalFilePath() {
         return sm_ManagerFinalFile_URI.toString();
     }
@@ -183,10 +165,6 @@ public class RecordingManager {
 
     public static void setIsRecording(boolean status) {
         sm_isRecording = status;
-    }
-
-    public static int getRecord_Capacity() {
-        return sm_nRecord_Capacity;
     }
 
 
@@ -250,14 +228,5 @@ public class RecordingManager {
         sm_ScreenRecordService.outputRecord(context);
     }
 
-
-    //=============================================================
-    /**
-     * File location After Recording. For Upload
-     */
-    //=============================================================
-    public static String getScreenRecordFilePath() {
-        return RecordingService.getFinalFilePath();
-    }
 
 }

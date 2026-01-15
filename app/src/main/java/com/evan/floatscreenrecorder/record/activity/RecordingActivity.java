@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
 import com.evan.floatscreenrecorder.common.constant.Constants;
+import com.evan.floatscreenrecorder.common.constant.RecordingConstants;
 import com.evan.floatscreenrecorder.record.manager.LiveDataManager;
 import com.evan.floatscreenrecorder.record.manager.RecordingManager;
 import com.evan.floatscreenrecorder.record.manager.ScreenManager;
@@ -24,7 +25,7 @@ import com.evan.floatscreenrecorder.record.service.RecordingService;
 public class RecordingActivity extends AppCompatActivity {
 
 
-    private final static int REQUEST_CODE = 1;
+    private final static int REQUEST_CODE = RecordingConstants.RECORDING_PERMISSION_REQUEST_CODE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,6 @@ public class RecordingActivity extends AppCompatActivity {
                     return;
                 }
 
-                RecordingManager.setRecordCapacity(30);
                 RecordingManager.startScreenRecord(RecordingActivity.this, REQUEST_CODE);
                 LiveDataManager.recordingServiceLiveData.removeObserver(this);
             }
@@ -90,6 +90,6 @@ public class RecordingActivity extends AppCompatActivity {
         }
 
         finish();
-        overridePendingTransition(0, 0);
+        overridePendingTransition(RecordingConstants.TRANSITION_NO_ANIMATION, RecordingConstants.TRANSITION_NO_ANIMATION);
     }
 }

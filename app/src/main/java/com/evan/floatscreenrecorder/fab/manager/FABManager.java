@@ -8,7 +8,6 @@ import android.view.WindowManager;
 
 import com.evan.floatscreenrecorder.common.util.DeviceUtils;
 import com.evan.floatscreenrecorder.fab.model.FloatingConfigurationModel;
-import com.evan.floatscreenrecorder.record.callback.CloseFloatingButtonCallback;
 
 /**
  * 浮動按鈕管理器
@@ -194,21 +193,6 @@ public class FABManager {
 
 
     // ==================== 業務方法 ====================
-
-    /**
-     * 關閉浮動按鈕
-     * @param context 上下文
-     * @param callback 關閉回調
-     */
-    public static void closeFloatingButton(Context context, CloseFloatingButtonCallback callback) {
-        Intent closeIntent = new Intent(FAB_CLOSE_ACTION);
-        closeIntent.setPackage(DeviceUtils.getPackageName(context));
-        context.sendBroadcast(closeIntent);
-        
-        if (callback != null) {
-            callback.onSuccess();
-        }
-    }
 
     /**
      * 重置所有狀態
