@@ -38,48 +38,48 @@ FloatScreenRecorder 是一款專業的 Android 螢幕錄製 SDK，支援透過�
 └─────────────────────────────────────┘
                   ↓
 ┌─────────────────────────────────────┐
-│      Activity 層 (UI Layer)           │
-│  - MainActivity (範例主頁面)          │
-│  - FABActivity (浮動按鈕頁面)         │
-│  - RecordingActivity (錄製頁面)      │
-│  - PermissionActivity (權限頁面)     │
-│  - ShareVideoActivity (分享頁面)     │
+│      Activity 層 (UI Layer)         
+│  - MainActivity (範例主頁面)         
+│  - FABActivity (浮動按鈕頁面)         
+│  - RecordingActivity (錄製頁面)     
+│  - PermissionActivity (權限頁面)     
+│  - ShareVideoActivity (分享頁面)     
 └─────────────────────────────────────┘
                   ↓
 ┌─────────────────────────────────────┐
-│      Manager 層 (業務邏輯層)           │
-│  - RecordingManager (錄製管理)        │
-│  - FABManager (浮動按鈕管理)          │
-│  - FABScreenManager (螢幕管理)       │
-│  - ScreenManager (螢幕資訊管理)      │
-│  - CallbackManager (回調管理)        │
-│  - LiveDataManager (數據觀察)        │
+│      Manager 層 (業務邏輯層)          
+│  - RecordingManager (錄製管理)       
+│  - FABManager (浮動按鈕管理)          
+│  - FABScreenManager (螢幕管理)       
+│  - ScreenManager (螢幕資訊管理)       
+│  - CallbackManager (回調管理)        
+│  - LiveDataManager (數據觀察)        
 └─────────────────────────────────────┘
                   ↓
 ┌─────────────────────────────────────┐
-│      Service 層 (後台服務)            │
-│  - RecordingService (錄製服務)       │
-│  - FABService (浮動按鈕服務)          │
+│      Service 層 (後台服務)            
+│  - RecordingService (錄製服務)       
+│  - FABService (浮動按鈕服務)          
 └─────────────────────────────────────┘
                   ↓
 ┌─────────────────────────────────────┐
-│      Model 層 (數據模型)              │
-│  - FloatingConfigurationModel        │
-│  - Constants (常量定義)               │
+│      Model 層 (數據模型)             
+│  - FloatingConfigurationModel      
+│  - Constants (常量定義)              
 └─────────────────────────────────────┘
                   ↓
 ┌─────────────────────────────────────┐
-│      Util 層 (工具類)                 │
-│  - FileUtil (檔案處理)                │
-│  - PermissionUtils (權限處理)        │
-│  - DeviceUtils (設備資訊)             │
-│  - LocalJsonUtils (本地圖片讀取)     │
-│  - CircleBitmap (圓形圖片處理)       │
-│  - ClickUtil (點擊工具)              │
-│  - MemoryManager (記憶體管理)        │
-│  - ToastUtil (提示工具)              │
-│  - LogUtil (日誌工具)                │
-│  - StrUtil (字串工具)                 │
+│      Util 層 (工具類)                 
+│  - FileUtil (檔案處理)                
+│  - PermissionUtils (權限處理)         
+│  - DeviceUtils (設備資訊)             
+│  - LocalJsonUtils (本地圖片讀取)      
+│  - CircleBitmap (圓形圖片處理)         
+│  - ClickUtil (點擊工具)               
+│  - MemoryManager (記憶體管理)         
+│  - ToastUtil (提示工具)               
+│  - LogUtil (日誌工具)                
+│  - StrUtil (字串工具)                 
 └─────────────────────────────────────┘
 ```
 
@@ -223,13 +223,12 @@ EvanSDK.shareRecordVideo(
 );
 ```
 
-## 📸 實機畫面展示
-
 ### 浮動按鈕界面
-![浮動按鈕界面](./assets/懸浮按鈕.gif)
+<img src="./assets/懸浮按鈕.gif" width="360" />
 
 ### 影片分享界面
-![影片分享界面](assets/分享.png)
+<img src="./assets/分享.png" width="360" />
+
 
 ## 👨‍💻 開發者
 
