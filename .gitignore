@@ -18,3 +18,12 @@ local.properties
 .cursor/rules/memory-bank/projectbrief.md
 .cursor/rules/memory-bank/systemPatterns.md
 .cursor/rules/memory-bank/techContext.md
+.idea/.gitignore
+.idea/appInsightsSettings.xml
+.idea/compiler.xml
+.idea/deploymentTargetDropDown.xml
+.idea/git_toolbox_blame.xml
+.idea/gradle.xml
+.idea/migrations.xml
+.idea/misc.xml
+.idea/vcs.xml
