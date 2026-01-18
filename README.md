@@ -226,7 +226,7 @@ EvanSDK.shareRecordVideo(
 ## 📸 實機畫面展示
 
 ### 浮動按鈕界面
-![浮動按鈕界面](assets/懸浮按鈕.mp4)
+![浮動按鈕界面](./assets/懸浮按鈕.gif)
 
 ### 影片分享界面
 ![影片分享界面](assets/分享.png)
